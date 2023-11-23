@@ -7,6 +7,7 @@
 
 
 PZEM004Tv30 pzem(2, 3);
+
 DHT dht(dht22_pin, DHT22TYPE);
 
 DynamicJsonDocument doc(1024);
@@ -26,14 +27,15 @@ void loop() {
   pzem_read();
   dht22_read();
 
-  doc["temp"] = voltage;
-  doc["rH"]   = humidity;
+  doc["temp"] = temperature;
+  doc["rh"]   = humidity;
   doc["voltage"] = voltage;
   doc["current"] = current;
 
   serializeJson(doc, Serial);
+  Serial.println();
 
-  delay(300);
+  delay(1000);
 }
 
 void pzem_read()
@@ -61,10 +63,10 @@ void dht22_read()
   // Check if any reads failed and exit early (to try again).
   if (!isnan(h) || !isnan(t)) {
 
-    temperature = t; current  = h;
+    temperature = t; humidity  = h;
   }else{
 
-    temperature = 0; current  = 0;    
+    temperature = 0; humidity  = 0;    
   }
 
   
